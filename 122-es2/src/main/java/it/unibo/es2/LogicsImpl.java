@@ -1,7 +1,5 @@
 package it.unibo.es2;
 
-import it.unibo.es1.Logics;
-
 public class LogicsImpl implements Logic{
 
     @Override
