@@ -8,10 +8,10 @@ import java.awt.event.ActionListener;
 public class GUI extends JFrame {
     
     private final Map<JButton, Pair<Integer, Integer>> buttons = new HashMap<>();
-    //private final Logics logics;
+    private final Logic logics;
     
     public GUI(int size) {
-        //this.logics = new LogicsImpl(size);
+        this.logics = new LogicsImpl(size);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(100*size, 100*size);
         
@@ -21,8 +21,9 @@ public class GUI extends JFrame {
         ActionListener al = (e)->{
             final JButton buttonClicked = (JButton)e.getSource();
             final Pair<Integer,Integer> buttonPosition = buttons.get(buttonClicked);
-            buttonClicked.setText(buttonPosition.toString()); // here call the logic to know what to show!
-            if (buttonPosition.equals(new Pair<>(0,0))){ // here call the logic instead, to know if should exit!
+            String textField = logics.hit(buttonPosition) ? "*" : " ";
+            buttonClicked.setText(textField); // here call the logic to know what to show!
+            if (logics.quitRows() || logics.quitCol()){ // here call the logic instead, to know if should exit!
                 System.exit(1);
             } 
         };
