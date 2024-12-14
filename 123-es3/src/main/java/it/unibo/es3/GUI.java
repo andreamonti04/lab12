@@ -1,37 +1,48 @@
 package it.unibo.es3;
 
 import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+
 import java.util.*;
+import java.awt.*;
 import java.util.List;
 
 public class GUI extends JFrame {
     
-    private final List<JButton> cells = new ArrayList<>();
+    private final Map<JButton, Pair<Integer, Integer>> cells = new HashMap<>();
+    private final JButton expand = new JButton(">");
+    private final Logics logic; 
     
     public GUI(int width) {
+        this.logic = new LogicsImpl(width);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(70*width, 70*width);
         
         JPanel panel = new JPanel(new GridLayout(width,width));
-        this.getContentPane().add(panel);
+        this.getContentPane().add(panel, BorderLayout.CENTER);
+        this.getContentPane().add(expand, BorderLayout.SOUTH);
         
-        ActionListener al = e -> {
-            var jb = (JButton)e.getSource();
-        	jb.setText(String.valueOf(cells.indexOf(jb)));
-        };
+        expand.addActionListener(e -> {
+            logic.toStart();
+            this.upView();
+            if(logic.toQuit()){
+                System.exit(0);
+            }
+        });
                 
         for (int i=0; i<width; i++){
             for (int j=0; j<width; j++){
-            	var pos = new Pair<>(j,i);
-                final JButton jb = new JButton(pos.toString());
-                this.cells.add(jb);
-                jb.addActionListener(al);
+                final JButton jb = new JButton(" ");
+                this.cells.put(jb, new Pair<Integer, Integer>(i, j));
                 panel.add(jb);
             }
         }
+        this.upView();
         this.setVisible(true);
+    }
+
+    private void upView() {
+    	List<Pair<Integer,Integer>> list = logic.getPos();
+    	cells.forEach((b,p)-> b.setText(list.contains(p) ? "*" : " "));
     }
     
 }

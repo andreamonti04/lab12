@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class LogicsImpl implements Logic{
+public class LogicsImpl implements Logic {
 
     private final List<List<Boolean>> map;
     private final int size;
